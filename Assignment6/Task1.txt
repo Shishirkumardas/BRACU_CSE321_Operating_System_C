@@ -1,0 +1,85 @@
+#include <stdio.h>
+int main()
+{
+    // P0, P1, P2, P3, P4 are the Process names here
+ 
+    int n, m, i, j, k;
+n = 5; // Number of processes
+
+m = 4; // Number of resources
+
+int alloc[5][4] = {{0, 1, 0, 3},{2, 0, 0, 0},{3,0,2,0}, {2, 1, 1,5},{ 0, 0, 2, 2} };
+
+int max[5][4] = {{6, 4, 3, 4}, // PO // MAX Matrix
+
+{3, 2, 2, 1}, // P1
+
+{9, 1, 2, 6}, // P2
+
+{2, 2, 2, 8 }, // P3
+
+{4, 3, 3, 7}, // P4
+}; // P4
+ 
+    int avail[4] = { 3, 3, 2 ,1 }; // Available Resources
+ 
+    int finish[n], ans[n],  ind = 0; //Ans hocce process number //sobgulo false kore nilam finish array r
+    for (k = 0; k < n; k++) {
+        finish[k] = 0;
+    }
+    int need[n][m]; //// need create korlam
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < m; j++)
+            need[i][j] = max[i][j] - alloc[i][j];
+    }
+    int y = 0;
+    for (k = 0; k < n; k++) {
+        for (i = 0; i < n; i++) {
+            if (finish[i] == 0) {
+ 
+                int flag = 0;
+                for (j = 0; j < m; j++) {
+                    if (need[i][j] > avail[j]){  // need available er theke boro hole oita  implement korbo na next er ta te jabo.ejonne flag 1 kore disi // etai mainly execution , eta thekei bujhte pari je konta age implement hobe.
+                        flag = 1;
+                         break;
+                    }
+                    // r jodi boro na hoy taile oita implement korbo
+                }
+ 
+                if (flag == 0) {  
+                    ans[ind++] = i; //ans array te jeta age jabe sei number er process age implement hobe
+                    for (y = 0; y < m; y++)
+                        avail[y] += alloc[i][y]; // available er sathe allocation add kore dicci//mane available ke update kortesi. oi just work ta na niye ekhane direct available ke update kore dicci.
+                    finish[i] = 1;  //implement korar por finish true kore dicci
+                }
+            }
+        }
+    }
+   
+      int flag = 1;
+       
+      for(int i=0;i<n;i++)  // eita diye just unsafe gulo print korlam
+    {
+      if(finish[i]==0)
+      {
+        flag=0; // eta koray sob unsafe gulor flag 1 hoye gelo r safe gulor 0 
+         printf("Deadlock Ahead");
+        break;
+      }
+    }
+     
+      if(flag==1)
+    {
+      printf(" SAFE Here\n");
+      for (i = 0; i < n - 1; i++) //eta diye just print korlam
+        printf(" P%d ->", ans[i]);
+      printf(" P%d", ans[n - 1]);
+    }
+    
+    
+     
+ 
+    return (0);
+ 
+    // This code is contributed by Deep Baldha (CandyZack)
+}
